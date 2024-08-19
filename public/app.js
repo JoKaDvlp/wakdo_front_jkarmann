@@ -14,12 +14,24 @@ class Order {
         this.order = order
     }
 
+    /**
+     * Increment a unique key to add id on item added to cart
+     * @returns incremented key
+     */
     generateUniqueKey(){
         return this.currentKey++
     }
+    /**
+     * Add item to cart
+     * @param {object} item an item to add to cart
+     */
     addItem(item){
         this.item[this.generateUniqueKey()]=item
     }
+    /**
+     * delete item from cart
+     * @param {integer} itemId 
+     */
     removeItem(itemId){
         delete this.item[itemId]
     }
@@ -64,7 +76,9 @@ fetch('../assets/categories.json')
     .then(data=>{
         buildCategoriesList(data)
     })
-
+/**
+ * Fetch products list depending on category to build products list
+ */
 function fetchProduct(category) {
     fetch('../assets/produits.json')
         .then(res=>{
@@ -74,6 +88,10 @@ function fetchProduct(category) {
             buildProductsList(data[category], category)
         })
 }
+/**
+ * Fetch products to build and display menu's components
+ * @param {string} menuSize the size of the menus to display the correct picture of sides
+ */
 function fetchProductForMenus(menuSize){
     fetch('../assets/produits.json')
     .then(res=>{
@@ -93,6 +111,9 @@ function fetchProductForMenus(menuSize){
     })
 }
 
+/**
+ * Fetch product to build and display the list of products added in the cart
+ */
 function fetchProductForCart(){
     fetch('../assets/produits.json')
     .then(res=>{
@@ -104,6 +125,10 @@ function fetchProductForCart(){
 }
 
 // CONSTRUCTION DOM
+/**
+ * Build a category list
+ * @param {array} data list of category
+ */
 function buildCategoriesList(data){
     let categoriesList = document.querySelector(".container-categories ul")
     let html=""
@@ -119,7 +144,11 @@ function buildCategoriesList(data){
         categoriesList.innerHTML = html
     });
 }
-
+/**
+ * Build products list to display
+ * @param {array} productsList an array of objects
+ * @param {string} category name of the category
+ */
 function buildProductsList(productsList, category){
     buildIntroProducts(category)
     let articlesListArea = document.querySelector(".container-articles ul")
@@ -137,7 +166,11 @@ function buildProductsList(productsList, category){
         articlesListArea.innerHTML = html
     });
 }
-
+/**
+ * Build products list for menus dialog tag
+ * @param {array} tabOfListOfProducts an array of list of products
+ * @param {string} container the class name of a container where to display the list
+ */
 function buildProductsListForMenus(tabOfListOfProducts, container){
     let listArea = document.querySelector(`.${container}`)
     let html=""
@@ -154,7 +187,10 @@ function buildProductsListForMenus(tabOfListOfProducts, container){
     // 1st beverage by default
     document.querySelectorAll(`.${container} .btn-article-choice`)[0].classList.add("selected", "default-choice")
 }
-
+/**
+ * Build the cart list to display
+ * @param {object} data a list of products indexed by categories
+ */
 function buildCartList(data){
     document.querySelector(".order-summary-main").innerHTML=""
     let html = ""
@@ -471,6 +507,10 @@ addOtherChoice.addEventListener("click", ()=>{
 })
 
 // FUNCTIONS
+/**
+ * Display title-list-articles depending on the category
+ * @param {string} category name of a category
+ */
 function buildIntroProducts(category){
 document.querySelector(".title-list-articles")
     let html = `<h2 class="regular font-28">Nos ${category}</h2>`
@@ -523,6 +563,13 @@ document.querySelector(".title-list-articles")
     }
     document.querySelector(".title-list-articles").innerHTML = html
 }
+/**
+ * Extract sides of the datalist of products
+ * @param {object} data list of products from fetch
+ * @param {*} tabIdOfSides the id of the sides to propose
+ * @param {*} category the category where to find the side
+ * @returns {array} an array of objects
+ */
 function filterSidesForMenu(data, tabIdOfSides, category){
     let tabOfSides = []
     tabIdOfSides.forEach(side=>{
@@ -530,12 +577,19 @@ function filterSidesForMenu(data, tabIdOfSides, category){
     })
     return tabOfSides;
 }
+/**
+ * Add item to cart and reset articleToAdd, dialog and refresh the cart area
+ * @param {object} articleToAdd the item to add to cart
+ */
 function addToCart(articleToAdd){
     cart.addItem(articleToAdd)
     articleToAdd={}    
     resetDialog()
     fetchProductForCart()
 }
+/**
+ * Reset the dialog with default parameters
+ */
 function resetDialog(){
     document.querySelectorAll(".selected").forEach(selectedCard=>{
         selectedCard.classList.remove("selected")
@@ -555,6 +609,9 @@ function resetDialog(){
     })
     steps[0].classList.remove("d-none")
 }
+/**
+ * Reset cart, articleToAdd, cart area of the DOM, the total price and the input.value for the table choice
+ */
 function resetOrder(){
     cart={}
     articleToAdd={}
@@ -564,21 +621,41 @@ function resetOrder(){
         input.value=""
     })
 }
+/**
+ * Undisplay the actual page and display the targetted page
+ * @param {string} actualPageId the tag id of the actual page ("div")
+ * @param {string} nextPageId the tag id of the targetted page ("div")
+ */
 function changePage(actualPageId, nextPageId){
     document.getElementById(`${actualPageId}`).classList.add("d-none")
     document.getElementById(`${nextPageId}`).classList.remove("d-none")
 }
+/**
+ * Capîtalize the first letter of a string
+ * @param {string} string a string where the first letter has to be capitalized
+ * @returns a string with the first letter capitalized
+ */
 function camelize(string){
     let stringToCamelize = string.split('')
     stringToCamelize[0] = stringToCamelize[0].toUpperCase()
     stringToCamelize = stringToCamelize.join('')
     return stringToCamelize;
 }
+/**
+ * Erase the word "menu" in the name of the item
+ * @param {string} article the name of the article to process
+ * @returns {string} the string modified
+ */
 function eraseMenu(article){
     article = article.split(' ')
     article.shift()
-    return article = article.join(' ')
+    article = article.join(' ')
+    return article
 }
+/**
+ * This function test if the input of table choice is correctly filled
+ * @returns Boolean true if input is valid false otherwise
+ */
 function tableChoiceIsValid(){
     let reg = /^\d$/
     let isValid = true

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wakdo propose un service de restauration rapide comprenant menus, burgers, boissons, sandwichs, dessert et wraps.">
+    <title>Wakdo : Fast-food</title>
+    <link rel="shortcut icon" href="./public/images/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="./public/style.css">
+</head>
+<body>
+    <main>
+        <!--SECTION CHOIX SUR PLACE OU A EMPORTER-->
+        <div class="full-screen main-bg position-relative" id="choice-area">
+            <div class="choice-container flex">
+                <p class="bold font-42">Bonjour,</p>
+                <p class="bold font-26">Souhaitez-vous consommer votre menu sur place ou préférez-vous l'emporter ?</p>
+                <div class="flex justify-between">
+                    <div class="btn-choice flex justify-center" data-choice="Sur place">
+                        <img src="./public/images/images/illustration-sur-place.png" alt="Image représentant une consommation sur place">
+                        <p class="bold font-26">Sur Place</p>
+                    </div>
+                    <div class="btn-choice flex justify-center" data-choice="A emporter">
+                        <img src="./public/images/images/illustration-a-emporter.png" alt="Image représentant une consommation à emporter">
+                        <p class="bold font-26">A Emporter</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--SECTION PRINCIPALE-->
+        <div class="full-screen flex d-none" id="order-area">
+            <!--ZONE DE CHOIX-->
+            <div class="choices-area">
+                <!--CATEGORIES AREA-->
+                <div class="categories flex">
+                    <div class="arrow flex align-center justify-center">
+                        <img src="./public/images/images/fleche-slider-left.png" alt="Flèche gauche">
+                    </div>
+                    <nav class="container-categories flex align-center">
+                        <ul class="flex">
+                            <!--CATEGORIES CARD-->
+                            <!-- <li class="category-card flex justify-center align-center">
+                                <div>
+                                    <img class="img-responsive" src="./public/images/categories/menus.png" alt="Photo de la catégorie menus">
+                                </div>
+                                <p>Menus</p>
+                            </li> -->
+                        </ul>
+                    </nav>
+                    <div class="arrow flex align-center justify-center">
+                        <img src="./public/images/images/fleche-slider-right.png" alt="Flèche droite">
+                    </div>
+                </div>
+                <!--ARTICLES AREA-->
+                <div class="articles flex align-between">
+                    <div class="title-list-articles">
+                        <h2 class="regular font-28">Bienvenue,</h2>
+                        <p>Choisissez une catégorie pour commencer</p>
+                    </div>
+                    <div class="container-articles">
+                        <ul class="flex">
+                            <!-- ARTICLE CARD -->
+                            <!-- <li class="article-card">
+                                <div>
+                                    <img class="img-responsive" src="./public/images/burgers/BIGMAC.png" alt="">
+                                </div>
+                                <p>Nom du produit</p>
+                                <p>7.50€</p>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!--ORDER SUMMARY AREA-->
+            <div class="order-summary">
+                <div class="order-summary-header flex justify-between">
+                    <div class="flex justify-center">
+                        <img src="./public/images/images/logo.png" alt="logo Wakdo">
+                    </div>
+                    <div class="flex justify-between align-center">
+                        <div>
+                            <p>Commande numéro</p>
+                            <p id="to-go-or-not">Sur place</p>
+                        </div>
+                        <p class="font-42" id="order-number">72</p>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="order-summary-container">
+                    <ul class="order-summary-main">
+                        <!-- <li class="order-card">
+                            <div class="flex justify-between align-center">
+                                <p class="bold">1 menu Maxi Best Of Big Mac</p>
+                                <button>
+                                    <img src="./public/images/images/trash.png" alt="">
+                                </button>
+                            </div>
+                            <ul class="font-14">
+                                <li>Frites</li>
+                                <li>Sprite</li>
+                                <li>Ketchup</li>
+                                <li>Sauce Deluxe</li>
+                            </ul>
+                        </li> -->
+                    </ul>
+                </div>
+                <div class="separator"></div>
+                <div class="order-summary-footer flex justify-between">
+                    <div class="flex justify-between">
+                        <p class="font-22">TOTAL<br>(ttc)</p>
+                        <p class="font-42 total-price">0.00€</p>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="btn-mono abandon-order">Abandon</button>
+                        <button class="btn-yellow validate-order">Payer</button>
+                    </div>
+                </div>
+            </div>
+            <!--DIALOG MENUS-->
+            <dialog id="menus-choice">
+                <!--SIZE CHOICE-->
+                <div id="menu-size-choice">
+                    <div class="dialog-header flex justify-end">
+                        <button class="close">
+                            <img src="./public/images/images/supprimer.png" alt="Bouton fermeture">
+                        </button>
+                    </div>
+                    <div class="dialog-main">
+                        <div class="mb50">
+                            <p class="font-26 bold">Une grosse faim ?</p>
+                            <p class="font-18 bold">Le menu maxi Best Of comprend un sandwich, une grande frite et une boisson 50 Cl</p>
+                        </div>
+                        <div class="article-choice flex justify-between mb50">
+                            <div class="btn-article-choice btn-size-choice flex justify-center selected default-choice" data-size="Menu Maxi Best Of">
+                                <img src="./public/images/images/illustration-maxi-best-of.png" alt="Photo d'un menu maxi best of">
+                                <p class="font-26 bold width-100">Menu Maxi Best Of</p>
+                            </div>
+                            <div class="btn-article-choice btn-size-choice flex justify-center" data-size="Menu Best Of">
+                                <img src="./public/images/images/illustration-best-of.png" alt="Photo d'un menu best of">
+                                <p class="font-26 bold width-100">Menu Best Of</p>
+                            </div>
+                        </div>
+                        <div class="width-100 flex justify-center">
+                            <button class="btn-yellow font-16 next-step">Etape Suivante</button>
+                        </div>
+                    </div>
+                </div>
+                <!--SIDE CHOICE-->
+                <div id="menu-side-choice" class="d-none">
+                    <div class="dialog-header flex justify-between">
+                        <button class="btn-mono step-back">Retour</button>
+                        <button class="close">
+                            <img src="./public/images/images/supprimer.png" alt="Bouton fermeture">
+                        </button>
+                    </div>
+                    <div class="dialog-main">
+                        <div class="mb50">
+                            <p class="font-26 bold">Choisissez votre accompagnement</p>
+                            <p class="font-18 bold">Frites, potatoes, la pomme de terre dans tous ses états</p>
+                        </div>
+                        <div class="article-choice flex justify-between mb50 align-center">
+                            <div>
+                                <img src="./public/images/images/fleche-slider-left.png" alt="Flèche gauche">
+                            </div>
+                            <div class="side-choice-container flex width-100">
+                                <!-- <div class="btn-article-choice flex justify-center" data-id="id">
+                                    <img src="./public/images/frites/GRANDE_FRITE.png" alt="Photo de frites">
+                                    <p class="font-26 bold width-100">Menu Maxi Best Of</p>
+                                </div> -->
+                            </div>
+                            <div>
+                                <img src="./public/images/images/fleche-slider-right.png" alt="Flèche droite">
+                            </div>
+                        </div>
+                        <div class="width-100 flex justify-center">
+                            <button class="btn-yellow font-16 next-step">Etape Suivante</button>
+                        </div>
+                    </div>
+                </div>
+                <!--BEVERAGE CHOICE-->
+                <div id="menu-beverage-choice" class="d-none">
+                    <div class="dialog-header flex justify-between">
+                        <button class="btn-mono step-back">Retour</button>
+                        <button class="close">
+                            <img src="./public/images/images/supprimer.png" alt="Bouton fermeture">
+                        </button>
+                    </div>
+                    <div class="dialog-main">
+                        <div class="mb50">
+                            <p class="font-26 bold">Choisissez votre boisson</p>
+                            <p class="font-18 bold">Un soda, un jus de fruit ou un verre d'eau pour accompagner votre repas</p>
+                        </div>
+                        <div class="beverage-choice flex justify-between align-center mb50">
+                            <div>
+                                <img src="./public/images/images/fleche-slider-left.png" alt="Flèche gauche">
+                            </div>
+                            <div class="beverage-choice-container flex width-100">
+                                <!-- <div class="btn-article-choice flex justify-center" data-id="id">
+                                    <img src="./public/images/frites/GRANDE_FRITE.png" alt="Photo de frites">
+                                    <p class="font-26 bold width-100">Menu Maxi Best Of</p>
+                                </div> -->
+                            </div>
+                            <div>
+                                <img src="./public/images/images/fleche-slider-right.png" alt="Flèche droite">
+                            </div>
+                        </div>
+                        <div class="width-100 flex justify-center">
+                            <button class="btn-yellow font-16 add-choice">Ajouter le menu à ma commande</button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
+            <!--DIALOG BEVERAGE-->
+            <dialog id="boissons-choice">
+                <div class="dialog-header flex justify-end">
+                    <button class="close">
+                        <img src="./public/images/images/supprimer.png" alt="Bouton fermeture">
+                    </button>
+                </div>
+                <div class="dialog-main">
+                    <div class="mb50">
+                        <p class="font-26 bold">Une petite soif ?</p>
+                        <p class="font-18 bold">Choisissez la taille de votre boisson, +0.50€ pour le format 50 Cl</p>
+                    </div>
+                    <div class="article-choice flex justify-between mb50">
+                        <div class="btn-article-choice flex justify-center selected default-choice" data-size="30cl">
+                            <img class="small-beverage" src="./public/images/boissons/coca-cola.png" alt="Photo d'une petite boisson">
+                            <p class="font-26 bold width-100">30 Cl</p>
+                        </div>
+                        <div class="btn-article-choice flex justify-center" data-size="50cl">
+                            <img src="./public/images/boissons/coca-cola.png" alt="Photo d'une grande boisson">
+                            <p class="font-26 bold width-100">50 Cl</p>
+                        </div>
+                    </div>
+                    <div class="width-100 flex justify-center">
+                        <div class="qty-selector flex justify-between align-center mb50">
+                            <button class="decrement btn-yellow font-40 bold">-</button>
+                            <p class="beverage-qty font-40 bold">1</p>
+                            <button class="increment btn-yellow font-40 bold">+</button>
+                        </div>
+                    </div>
+                    <div class="width-100 flex justify-center gap-30">
+                        <button class="btn-mono font-18">Annuler</button>
+                        <button class="btn-yellow font-18 add-choice">Ajouter à la commande</button>
+                    </div>
+                </div>
+            </dialog>
+            <!-- DIALOG OTHERS -->
+            <dialog id="other-choice">
+                <div class="dialog-header flex justify-end">
+                    <button class="close">
+                        <img src="./public/images/images/supprimer.png" alt="Bouton fermeture">
+                    </button>
+                </div>
+                <div class="dialog-main">
+                    <div class="mb50">
+                        <p class="font-26 bold">Une petite soif ?</p>
+                        <p class="font-18 bold">Choisissez la taille de votre boisson, +0.50€ pour le format 50 Cl</p>
+                    </div>
+                    <div class="img-other-choice width-100 flex justify-center mb50"></div>
+                    <div class="width-100 flex justify-center">
+                        <div class="qty-selector flex justify-between align-center mb50">
+                            <button class="decrement btn-yellow font-40 bold">-</button>
+                            <p class="qty font-40 bold">1</p>
+                            <button class="increment btn-yellow font-40 bold">+</button>
+                        </div>
+                    </div>
+                    <div class="width-100 flex justify-center gap-30">
+                        <button class="btn-mono font-18">Annuler</button>
+                        <button class="btn-yellow font-18 add-choice">Ajouter à la commande</button>
+                    </div>
+                </div>
+            </dialog>
+        </div>
+        <!--SECTION CHOIX TABLE-->
+        <div class="full-screen main-bg flex align-center d-none" id="table-choice-area">
+            <form class="table-choice-form flex flex-column align-center">
+                <div class="flex justify-center">
+                    <img src="./public/images/images/chevalet.png" alt="Photo d'un chevalet pour le service à table">
+                </div>
+                <div class="table-choice flex">
+                    <p class="bold font-42">Pour être servis à table,</p>
+                    <p class="bold font-26">Récupérez un chevalet et indiquez ici le numéro inscrit dessus</p>
+                    <div class="flex width-100 justify-center">
+                        <input type="text" name="num-1" maxlength="1" id="num-1">
+                        <input type="text" name="num-2" maxlength="1" id="num-2">
+                        <input type="text" name="num-3" maxlength="1" id="num-3">
+                    </div>
+                </div>
+                <button type="submit" class="btn-yellow">Enregistrer le numéro</button>
+            </form>
+        </div>
+        <!--SECTION REMERCIEMENT-->
+        <div class="thanks-area full-screen main-bg position-relative d-none" id="thanks-area">
+            <div class="thanks-container bold flex flex-column">
+                <p class="font-42">Toute l'équipe vous remercie,</p>
+                <p class="font-26">Et vous souhaite un bon appétit dans nos restaurants,</p>
+                <p class="font-48 font-caveat">A bientôt !</p>
+            </div>
+            <button class="btn-yellow font-18 new-order">Nouvelle commande</button>
+        </div>
+    </main>
+    <script src="public/app.js" defer></script>
+</body>
+</html>

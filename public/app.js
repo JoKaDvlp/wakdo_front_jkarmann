@@ -43,6 +43,7 @@ class Menus {
     size = "Menu Maxi Best Of";
     side = "frites";
     beverage="";
+    sauce="";
 }
 
 class Boissons {
@@ -109,6 +110,7 @@ function fetchProductForMenus(menuSize){
         }
         let salads = filterSidesForMenu(data,[60], "salades")
         buildProductsListForMenus([sides,salads], "side-choice-container")
+        buildProductsListForMenus([data["sauces"]], "sauce-choice-container")
     })
 }
 
@@ -206,6 +208,7 @@ function buildCartList(data){
         }
         let articleToFind = data[article.category].find(articleSearched => articleSearched.id == article.article)
         let beverageToFind = data["boissons"].find(beverageSearched => beverageSearched.id == article.beverage)
+        let sauceToFind = data["sauces"].find(sauceSearched => sauceSearched.id == article.sauce)
         
         if (article.category == "menus") {
             total += articleToFind.prix
@@ -224,6 +227,7 @@ function buildCartList(data){
                 </div>
                 <ul class="font-14">
                     <li>${sideToFind.nom}</li>
+                    <li>Sauce ${sauceToFind.nom}</li>
                     <li>${beverageToFind.nom}</li>
                 </ul>
             </li>
@@ -421,9 +425,23 @@ document.querySelector(".side-choice-container").addEventListener("click", funct
         menuSideChoice.classList.add("selected")
     }
 })
-let nextStep = document.querySelector("#menu-side-choice .next-step")
-nextStep.addEventListener("click", ()=>{
+let nextStep1 = document.querySelector("#menu-side-choice .next-step")
+nextStep1.addEventListener("click", ()=>{
     articleToAdd.side = document.querySelector("#menu-side-choice div[class~='selected']").dataset.id
+})
+// menu side choice
+document.querySelector(".sauce-choice-container").addEventListener("click", function(event){
+    document.querySelectorAll(".sauce-choice-container .btn-article-choice").forEach(btn=>{
+        btn.classList.remove("selected")
+    })
+    let menuSideChoice = event.target.closest(".sauce-choice-container .btn-article-choice")
+    if (menuSideChoice) {
+        menuSideChoice.classList.add("selected")
+    }
+})
+let nextStep2 = document.querySelector("#menu-sauce-choice .next-step")
+nextStep2.addEventListener("click", ()=>{
+    articleToAdd.sauce = document.querySelector("#menu-sauce-choice div[class~='selected']").dataset.id
 })
 // menu beverage choice
 document.querySelector(".beverage-choice-container").addEventListener("click", function(event){

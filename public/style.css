@@ -191,22 +191,12 @@ dialog{
 .dialog-header{
     width: 100%;
 }
-.dialog-main{
-    width: 75%;
-    margin: auto;
-}
-#menu-beverage-choice .dialog-main,#menu-side-choice .dialog-main{
-    width: 100%;
-}
-#menu-beverage-choice .dialog-main>div:first-child, #menu-beverage-choice .dialog-main>div:last-child,
-#menu-side-choice .dialog-main>div:first-child, #menu-side-choice .dialog-main>div:last-child
-{
+.width-75{
     width: 75%;
     margin-right: auto;
     margin-left: auto;
 }
-
-.beverage-choice-container, .side-choice-container{
+.menus-choice-container{
     width: 80%;
     overflow-x: scroll;
     scrollbar-width: none;
@@ -216,17 +206,15 @@ dialog{
 ::backdrop{
     background-color: rgba(0, 0, 0, 0.33);
 }
-.article-choice{
-    width: 100%;
-}
 .btn-article-choice{
-    width: 45%;
+    width: 200px;
     border: 4px solid var(--box-stroke);
     border-radius: 8px;
     padding: 10px;
 }
-#menu-beverage-choice .btn-article-choice{
-    width: 25%;
+.btn-article-choice img{
+    width: 200px;
+    height: auto;
 }
 .btn-article-choice p{
     text-align: center;

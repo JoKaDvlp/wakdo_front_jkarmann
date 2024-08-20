@@ -107,7 +107,8 @@ function fetchProductForMenus(menuSize){
         } else {
             sides = filterSidesForMenu(data,[35,38],"frites")
         }
-        buildProductsListForMenus([sides,data["salades"]], "side-choice-container")
+        let salads = filterSidesForMenu(data,[60], "salades")
+        buildProductsListForMenus([sides,salads], "side-choice-container")
     })
 }
 

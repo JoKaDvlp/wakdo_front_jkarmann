@@ -4,14 +4,16 @@ let orderNumber = 1
 
 //OBJETS METIER
 class Order {
-    order=1
+    order_id=0;
+    order=1;
     choix_lieu="";
     item={};
     service="";
     currentKey=0;
-    constructor(choix_lieu, order){
+    constructor(choix_lieu, order, order_id){
         this.choix_lieu=choix_lieu
         this.order = order
+        this.order_id = order_id
     }
 
     /**
@@ -69,8 +71,8 @@ const classes = {
     Other,
 }
 
-// RECUPERATION DES DONNEES
-fetch('../assets/categories.json')
+// DATA COLLECT
+fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
     .then(res=>{
         return res.json()
     })
@@ -81,7 +83,7 @@ fetch('../assets/categories.json')
  * Fetch products list depending on category to build products list
  */
 function fetchProduct(category) {
-    fetch('../assets/produits.json')
+    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
         .then(res=>{
             return res.json()
         })
@@ -94,7 +96,7 @@ function fetchProduct(category) {
  * @param {string} menuSize the size of the menus to display the correct picture of sides
  */
 function fetchProductForMenus(menuSize){
-    fetch('../assets/produits.json')
+    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
     .then(res=>{
         return res.json()
     })
@@ -104,11 +106,12 @@ function fetchProductForMenus(menuSize){
         // List of sides for menus including fries and salads
         let sides = []
         if (menuSize === "Menu Maxi Best Of") {
-            sides = filterSidesForMenu(data,[37,39],"frites")
+            sides = filterSidesForMenu(data,[24,26],"frites")
         } else {
-            sides = filterSidesForMenu(data,[35,38],"frites")
+            sides = filterSidesForMenu(data,[22,25],"frites")
         }
         let salads = filterSidesForMenu(data,[60], "salades")
+        
         buildProductsListForMenus([sides,salads], "side-choice-container")
         buildProductsListForMenus([data["sauces"]], "sauce-choice-container")
     })
@@ -118,13 +121,38 @@ function fetchProductForMenus(menuSize){
  * Fetch product to build and display the list of products added in the cart
  */
 function fetchProductForCart(){
-    fetch('../assets/produits.json')
+    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
     .then(res=>{
         return res.json()
     })
     .then(data=>{
         buildCartList(data)
     })
+}
+
+// SEND DATA
+
+function sendData(cartData){
+    console.log(cartData);
+    
+    try {
+        fetch ("http://exam-back.jkarmann.mywebecom.ovh/api/add-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cartData),
+        })
+        .then (response=>{
+            return response.json();
+        })
+        .then (data => {
+            console.log(data);
+            
+        })
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 // CONSTRUCTION DOM
@@ -160,7 +188,7 @@ function buildProductsList(productsList, category){
         html += `
         <li class="article-card" data-image="${product.image}" data-category="${category}" data-id="${product.id}">
             <div>
-                <img class="img-responsive" src="./public/images${product.image}" alt="Photo de ${product.nom}">
+                <img class="img-responsive" src="${product.image}" alt="Photo de ${product.nom}">
             </div>
             <p>${product.nom}</p>
             <p>${product.prix.toFixed(2)}€</p>
@@ -181,7 +209,7 @@ function buildProductsListForMenus(tabOfListOfProducts, container){
         listOfProducts.forEach(article => {
         html +=`
         <div class="btn-article-choice flex justify-center" data-id="${article.id}">
-            <img src="./public/images${article.image}" alt="Photo de ${article.nom}">
+            <img src="${article.image}" alt="Photo de ${article.nom}">
             <p class="font-26 bold width-100">${article.nom}</p>
         </div>
         `
@@ -206,9 +234,14 @@ function buildCartList(data){
                 sideToFind = sideSearched
             }
         }
+        console.log(data);
+        console.log(cart);
+        
+        
         let articleToFind = data[article.category].find(articleSearched => articleSearched.id == article.article)
         let beverageToFind = data["boissons"].find(beverageSearched => beverageSearched.id == article.beverage)
         let sauceToFind = data["sauces"].find(sauceSearched => sauceSearched.id == article.sauce)
+        
         
         if (article.category == "menus") {
             total += articleToFind.prix
@@ -217,10 +250,16 @@ function buildCartList(data){
                 total+=0.50
             }
             articleToFind.nom = eraseMenu(articleToFind.nom)
+            let size = "";
+            if (article.size == 1) {
+                size = "Maxi Best Of"
+            } else {
+                size = "Best Of"
+            }
             html +=`
             <li class="order-card">
                 <div class="flex justify-between align-center">
-                    <p class="bold">1 ${article.size} ${articleToFind.nom}</p>
+                    <p class="bold">1 ${size} ${articleToFind.nom}</p>
                     <button class="trash" data-id="${key}">
                         <img src="./public/images/images/trash.png" alt="image du bouton de suppression de suppression">
                     </button>
@@ -234,13 +273,17 @@ function buildCartList(data){
             `
         } else if (article.category == "boissons") {
             total += articleToFind.prix * article.qty
-            if (article.size === "50cl") {
+            let size = ""
+            if (article.size == 2) {
                 total+=0.50
+                size = "50cl"
+            } else {
+                size = "30cl"
             }
             html +=`
             <li class="order-card">
                 <div class="flex justify-between align-center">
-                    <p class="bold">${article.qty} ${articleToFind.nom} ${article.size}</p>
+                    <p class="bold">${article.qty} ${articleToFind.nom} ${size}</p>
                     <button class="trash" data-id="${key}">
                         <img src="./public/images/images/trash.png" alt="image du bouton de suppression">
                     </button>
@@ -269,10 +312,16 @@ function buildCartList(data){
 // Event listener on placeToEatChoice
 document.querySelectorAll(".btn-choice").forEach(btn => {
     btn.addEventListener("click", ()=>{
-        cart = new Order(btn.dataset.choice, orderNumber)
-        document.getElementById("to-go-or-not").innerHTML = btn.dataset.choice
-        document.getElementById("order-number").innerHTML = cart.order
-        changePage("choice-area","order-area")
+        fetch(`http://exam-back.jkarmann.mywebecom.ovh/api/prepare-order`)
+            .then(response=>{
+                return response.json();
+            })
+            .then(data=>{
+                cart = new Order(btn.dataset.choice, data.order_number, data.order_id)
+                document.getElementById("to-go-or-not").innerHTML = btn.dataset.choice
+                document.getElementById("order-number").innerHTML = cart.order
+                changePage("choice-area","order-area")
+            })
     })
 })
 // Event listener on categories cards
@@ -291,9 +340,14 @@ document.querySelector(".container-articles ul").addEventListener("click", funct
         let dataCategory = (productCard.dataset.category === "menus" || productCard.dataset.category === "boissons") ? productCard.dataset.category : "other"
         // New object instantiation depend on category
         if (dataCategory === "other") {
-            document.querySelector(".img-other-choice").innerHTML =`<img src="./public/images${productCard.dataset.image}" alt="Photo du produit">`
+            document.querySelector(".img-other-choice").innerHTML =`<img src="${productCard.dataset.image}" alt="Photo du produit">`
             let className = camelize(dataCategory);
             articleToAdd = new classes[className](productCard.dataset.category)
+        } else if (dataCategory === "boissons"){
+            document.querySelector(".small-beverage").src =`${productCard.dataset.image}`
+            document.querySelector(".big-beverage").src =`${productCard.dataset.image}`
+            let className = camelize(dataCategory);
+            articleToAdd = new classes[className]
         } else {
             let className = camelize(dataCategory);
             articleToAdd = new classes[className]
@@ -329,8 +383,10 @@ document.querySelector(".abandon-order").addEventListener("click", ()=>{
 document.querySelector(".validate-order").addEventListener("click", ()=>{
     if (Object.keys(cart.item).length>0 && cart.choix_lieu === "Sur place") {
         changePage("order-area","table-choice-area")
+        document.getElementById("num-1").focus()
     } else if (Object.keys(cart.item).length>0){
         changePage("order-area","thanks-area");
+        sendData(cart);
         console.log(JSON.stringify(cart));
     }
 })
@@ -360,6 +416,7 @@ document.querySelector(".table-choice-form").addEventListener("submit", (e)=>{
         cart.service += input.value
     })
     if (tableChoiceIsValid()){
+        sendData(cart);
         changePage("table-choice-area", "thanks-area")
         console.log(JSON.stringify(cart));
     }
@@ -590,10 +647,13 @@ document.querySelector(".title-list-articles")
  * @returns {array} an array of objects
  */
 function filterSidesForMenu(data, tabIdOfSides, category){
+    
     let tabOfSides = []
     tabIdOfSides.forEach(side=>{
-        tabOfSides.push(data[category].find(sideToFind => sideToFind.id === side))
+        tabOfSides.push(data[category].find(sideToFind => sideToFind.id == side))        
     })
+    console.log(tabOfSides);
+    
     return tabOfSides;
 }
 /**

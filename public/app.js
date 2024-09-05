@@ -1,6 +1,9 @@
 /*
 
 Table of contents :
+
+    CTRL+F : to search the *number*
+
     *1* : Objects
     *2* : Fetching data
     *3* : Sending data
@@ -277,7 +280,7 @@ function buildCartList(data){
                 <div class="flex justify-between align-center">
                     <p class="bold">1 ${size} ${articleToFind.nom}</p>
                     <button class="trash" data-id="${key}">
-                        <img src="./public/images/images/trash.png" alt="image du bouton de suppression de suppression">
+                        <img src="./public/images/images/trash.png" alt="image du bouton de suppression">
                     </button>
                 </div>
                 <ul class="font-14">
@@ -776,7 +779,7 @@ function eraseMenu(article){
  * @returns Boolean true if input is valid false otherwise
  */
 function tableChoiceIsValid(){
-    let reg = /^\d$/
+    let reg = /^\d$/ // Regexp to match a single digit from 0 to 9
     let isValid = true
     inputs.forEach(input=>{
         if (reg.test(input.value) == false) {

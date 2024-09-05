@@ -1,7 +1,24 @@
+/*
+
+Table of contents :
+    *1* : Objects
+    *2* : Fetching data
+    *3* : Sending data
+    *4* : DOM construction function for fetch
+    *5* : Event listener
+    *6* : Dialog management
+    *7* : Menus management
+    *8* : Beverage management
+    *9* : Other categories management
+    *10* : functions
+
+*/
+
+
 let cart = {}
 let articleToAdd = {}
 
-//OBJETS METIER
+//OBJETS METIER *1*
 class Order {
     order_id=0;
     order=1;
@@ -70,7 +87,7 @@ const classes = {
     Other,
 }
 
-// DATA COLLECT
+// DATA COLLECT *2*
 fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
     .then(res=>{
         return res.json()
@@ -104,7 +121,7 @@ function fetchProductForMenus(menuSize){
         buildProductsListForMenus([data["boissons"]],"beverage-choice-container")
         // List of sides for menus including fries and salads
         let sides = []
-        if (menuSize === "Menu Maxi Best Of") {
+        if (menuSize === "1") {
             sides = filterSidesForMenu(data,[24,26],"frites")
         } else {
             sides = filterSidesForMenu(data,[22,25],"frites")
@@ -129,7 +146,7 @@ function fetchProductForCart(){
     })
 }
 
-// SEND DATA
+// SEND DATA *3*
 
 function sendData(cartData){
     console.log(cartData);
@@ -154,7 +171,7 @@ function sendData(cartData){
     }
 }
 
-// CONSTRUCTION DOM
+// CONSTRUCTION DOM *4*
 /**
  * Build a category list
  * @param {array} data list of category
@@ -307,7 +324,7 @@ function buildCartList(data){
     document.querySelector(".total-price").innerHTML = total.toFixed(2) + "€"
 }
 
-// ACTIONS
+// ACTIONS *5*
 // Event listener on placeToEatChoice
 document.querySelectorAll(".btn-choice").forEach(btn => {
     btn.addEventListener("click", ()=>{
@@ -451,7 +468,7 @@ containers.forEach(container => {
     })
 });
 
-// DIALOG MANAGEMENT
+// DIALOG MANAGEMENT *6*
 // Menu dialog
 let choiceSteps = document.querySelectorAll("#menus-choice>div")
 let btnsNextStep = document.querySelectorAll("#menus-choice .next-step")
@@ -479,7 +496,7 @@ btnsStepBack.forEach((btn, pos) => {
     })
 })
 
-// MENU MANAGEMENT
+// MENU MANAGEMENT *7*
 // menu size choice
 let btnsSizeChoice = document.querySelectorAll("#menu-size-choice .btn-size-choice")
 btnsSizeChoice.forEach(btn => {
@@ -540,7 +557,7 @@ validateMenu.addEventListener("click", ()=>{
     addToCart(articleToAdd)
 })
 
-// BEVERAGE MANAGEMENT
+// BEVERAGE MANAGEMENT *8*
 // Size choice
 let sizeChoice = document.querySelectorAll("#boissons-choice .btn-article-choice")
 sizeChoice.forEach(size =>{
@@ -579,7 +596,7 @@ addBeverageChoice.addEventListener("click", ()=>{
     articleToAdd = {}
 })
 
-// OTHER CATEGORY MANAGEMENT
+// OTHER CATEGORY MANAGEMENT *9*
 let increment = document.querySelector("#other-choice .increment")
 let decrement = document.querySelector("#other-choice .decrement")
 
@@ -605,7 +622,7 @@ addOtherChoice.addEventListener("click", ()=>{
     articleToAdd = {}
 })
 
-// FUNCTIONS
+// FUNCTIONS *10*
 /**
  * Display title-list-articles depending on the category
  * @param {string} category name of a category

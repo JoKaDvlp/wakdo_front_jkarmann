@@ -6,14 +6,49 @@ Table of contents :
 
     *1* : Objects
     *2* : Fetching data
+        *2.1* : Fetch categories
+        *2.2* : Fetch products list depending on category to build products list
+        *2.3* : Fetch products to build and display menu's components
+        *2.4* : Fetch product to build and display the list of products added in the cart
     *3* : Sending data
     *4* : DOM construction function for fetch
+        *4.1* : Build a category list
+        *4.2* : Build products list to display
+        *4.3* : Build products list for menus dialog tag
+        *4.4* : Build the cart list to display
     *5* : Event listener
+        *5.1* : Event listener on placeToEatChoice
+        *5.2* : Event listener on categories cards
+        *5.3* : Event listener on products to display dialog and start adding products
+        *5.4* : Event listener on closeBtn to undisplay dialog
+        *5.5* : Event listener to delete an item from cart
+        *5.6* : Event listener to abandon the order
+        *5.7* : Event listener to validate the order
+        *5.8* : Event listener to switch automatically from an input to another
+        *5.9* : Event listener to validate table choice and finalize the order
+        *5.10* : Event listener to start a new order after adding an order
+        *5.11* : Event listener to scroll with arrow
     *6* : Dialog management
     *7* : Menus management
+        *7.1* : menu size choice
+        *7.2* : menu side choice
+        *7.3* : menu sauce choice
+        *7.4* : menu beverage choice
     *8* : Beverage management
+        *8.1* : Size choice
+        *8.2* : Quantity choice
+        *8.3* : beverage choice
     *9* : Other categories management
     *10* : functions
+        *10.1* : Display title-list-articles depending on the category
+        *10.2* : Extract sides of the datalist of products
+        *10.3* : Add item to cart and reset articleToAdd, dialog and refresh the cart area
+        *10.4* : Reset the dialog with default parameters
+        *10.5* : Reset cart, articleToAdd, cart area of the DOM, the total price and the input.value for the table choice
+        *10.6* : Undisplay the actual page and display the targetted page
+        *10.7* : Capîtalize the first letter of a string
+        *10.8* : Erase the word "menu" in the name of the item
+        *10.9* : This function test if the input of table choice is correctly filled
 
 */
 
@@ -90,7 +125,10 @@ const classes = {
     Other,
 }
 
-// DATA COLLECT *2*
+// FETCHING DATA *2*
+/**
+ * *2.1* : Fetch categories 
+ */
 fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
     .then(res=>{
         return res.json()
@@ -99,7 +137,7 @@ fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
         buildCategoriesList(data)
     })
 /**
- * Fetch products list depending on category to build products list
+ * *2.2* : Fetch products list depending on category to build products list
  */
 function fetchProduct(category) {
     fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
@@ -111,7 +149,7 @@ function fetchProduct(category) {
         })
 }
 /**
- * Fetch products to build and display menu's components
+ * *2.3* : Fetch products to build and display menu's components
  * @param {string} menuSize the size of the menus to display the correct picture of sides
  */
 function fetchProductForMenus(menuSize){
@@ -137,7 +175,7 @@ function fetchProductForMenus(menuSize){
 }
 
 /**
- * Fetch product to build and display the list of products added in the cart
+ * *2.4* : Fetch product to build and display the list of products added in the cart
  */
 function fetchProductForCart(){
     fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
@@ -174,9 +212,9 @@ function sendData(cartData){
     }
 }
 
-// CONSTRUCTION DOM *4*
+// DOM construction function for fetch *4*
 /**
- * Build a category list
+ * *4.1* : Build a category list
  * @param {array} data list of category
  */
 function buildCategoriesList(data){
@@ -195,7 +233,7 @@ function buildCategoriesList(data){
     });
 }
 /**
- * Build products list to display
+ * *4.2* : Build products list to display
  * @param {array} productsList an array of objects
  * @param {string} category name of the category
  */
@@ -217,7 +255,7 @@ function buildProductsList(productsList, category){
     });
 }
 /**
- * Build products list for menus dialog tag
+ * *4.3* : Build products list for menus dialog tag
  * @param {array} tabOfListOfProducts an array of list of products
  * @param {string} container the class name of a container where to display the list
  */
@@ -238,7 +276,7 @@ function buildProductsListForMenus(tabOfListOfProducts, container){
     document.querySelectorAll(`.${container} .btn-article-choice`)[0].classList.add("selected", "default-choice")
 }
 /**
- * Build the cart list to display
+ * *4.4* : Build the cart list to display
  * @param {object} data a list of products indexed by categories
  */
 function buildCartList(data){
@@ -328,7 +366,7 @@ function buildCartList(data){
 }
 
 // ACTIONS *5*
-// Event listener on placeToEatChoice
+// *5.1* : Event listener on placeToEatChoice
 document.querySelectorAll(".btn-choice").forEach(btn => {
     btn.addEventListener("click", ()=>{
         fetch(`http://exam-back.jkarmann.mywebecom.ovh/api/prepare-order`)
@@ -343,7 +381,7 @@ document.querySelectorAll(".btn-choice").forEach(btn => {
             })
     })
 })
-// Event listener on categories cards
+// *5.2* : Event listener on categories cards
 document.querySelector(".container-categories ul").addEventListener("click", function(event){
     let categoryCard = event.target.closest(".category-card");
     if (categoryCard) {
@@ -352,7 +390,7 @@ document.querySelector(".container-categories ul").addEventListener("click", fun
         fetchProduct(categoryCard.dataset.category)
     }
 })
-// Event listener on products to display dialog and start adding products
+// *5.3* : Event listener on products to display dialog and start adding products
 document.querySelector(".container-articles ul").addEventListener("click", function(event){
     let productCard = event.target.closest(".article-card");
     if (productCard) {        
@@ -377,7 +415,7 @@ document.querySelector(".container-articles ul").addEventListener("click", funct
         articleToAdd.article = productCard.dataset.id
     }
 })
-// Event listener on closeBtn to undisplay dialog
+// *5.4* : Event listener on closeBtn to undisplay dialog
 document.querySelectorAll('dialog .close').forEach(closeBtn => {
     closeBtn.addEventListener('click', function() {
         this.closest('dialog').close();
@@ -385,7 +423,7 @@ document.querySelectorAll('dialog .close').forEach(closeBtn => {
         articleToAdd={}
     });
 });
-// Event listener to delete an item from cart
+// *5.5* : Event listener to delete an item from cart
 document.querySelector(".order-summary-main").addEventListener("click", function(event){
     let deleteItem = event.target.closest(".trash");
     if (deleteItem) {
@@ -393,12 +431,12 @@ document.querySelector(".order-summary-main").addEventListener("click", function
         fetchProductForCart()
     }
 })
-// Event listener to abandon the order
+// *5.6* : Event listener to abandon the order
 document.querySelector(".abandon-order").addEventListener("click", ()=>{
     changePage("order-area","choice-area")
     resetOrder()
 })
-// Event listener to validate the order
+// *5.7* : Event listener to validate the order
 document.querySelector(".validate-order").addEventListener("click", ()=>{
     if (Object.keys(cart.item).length>0 && cart.choix_lieu === "Sur place") {
         changePage("order-area","table-choice-area")
@@ -409,7 +447,7 @@ document.querySelector(".validate-order").addEventListener("click", ()=>{
         console.log(JSON.stringify(cart));
     }
 })
-// Event listener to switch automatically from an input to another
+// *5.8* : Event listener to switch automatically from an input to another
 let inputs = document.querySelectorAll("#num-1,#num-2,#num-3")
 inputs[0].focus()
 
@@ -427,7 +465,7 @@ inputs.forEach((input, pos) => {
         }
     })
 });
-// Event listener to validate table choice and finalize the order
+// *5.9* : Event listener to validate table choice and finalize the order
 document.querySelector(".table-choice-form").addEventListener("submit", (e)=>{
     e.preventDefault()
     cart.service=""
@@ -440,13 +478,13 @@ document.querySelector(".table-choice-form").addEventListener("submit", (e)=>{
         console.log(JSON.stringify(cart));
     }
 })
-// Event listener to start a new order after adding an order
+// *5.10* : Event listener to start a new order after adding an order
 document.querySelector(".new-order").addEventListener("click", ()=>{
     changePage("thanks-area", "choice-area")
     resetOrder()
     orderNumber++
 })
-// Event listener to scroll with arrow
+// *5.11* : Event listener to scroll with arrow
 const containers = document.querySelectorAll(".container-categories, .side-choice-container, .sauce-choice-container, .beverage-choice-container")
 const scrollAmount = 300;
 
@@ -472,7 +510,6 @@ containers.forEach(container => {
 });
 
 // DIALOG MANAGEMENT *6*
-// Menu dialog
 let choiceSteps = document.querySelectorAll("#menus-choice>div")
 let btnsNextStep = document.querySelectorAll("#menus-choice .next-step")
 let btnsStepBack = document.querySelectorAll("#menus-choice .step-back")
@@ -500,7 +537,7 @@ btnsStepBack.forEach((btn, pos) => {
 })
 
 // MENU MANAGEMENT *7*
-// menu size choice
+// *7.1* : menu size choice
 let btnsSizeChoice = document.querySelectorAll("#menu-size-choice .btn-size-choice")
 btnsSizeChoice.forEach(btn => {
     btn.addEventListener("click", ()=>{
@@ -515,7 +552,7 @@ validateSize.addEventListener("click",()=>{
     articleToAdd.size = document.querySelector("#menu-size-choice div[class~='selected']").dataset.size
     fetchProductForMenus(articleToAdd.size)
 })
-// menu side choice
+// *7.2* : menu side choice
 document.querySelector(".side-choice-container").addEventListener("click", function(event){
     document.querySelectorAll(".side-choice-container .btn-article-choice").forEach(btn=>{
         btn.classList.remove("selected")
@@ -529,7 +566,7 @@ let nextStep1 = document.querySelector("#menu-side-choice .next-step")
 nextStep1.addEventListener("click", ()=>{
     articleToAdd.side = document.querySelector("#menu-side-choice div[class~='selected']").dataset.id
 })
-// menu side choice
+// *7.3* : menu sauce choice
 document.querySelector(".sauce-choice-container").addEventListener("click", function(event){
     document.querySelectorAll(".sauce-choice-container .btn-article-choice").forEach(btn=>{
         btn.classList.remove("selected")
@@ -543,7 +580,7 @@ let nextStep2 = document.querySelector("#menu-sauce-choice .next-step")
 nextStep2.addEventListener("click", ()=>{
     articleToAdd.sauce = document.querySelector("#menu-sauce-choice div[class~='selected']").dataset.id
 })
-// menu beverage choice
+// *7.4* : menu beverage choice
 document.querySelector(".beverage-choice-container").addEventListener("click", function(event){
     document.querySelectorAll(".beverage-choice-container .btn-article-choice").forEach(btn=>{
         btn.classList.remove("selected")
@@ -561,7 +598,7 @@ validateMenu.addEventListener("click", ()=>{
 })
 
 // BEVERAGE MANAGEMENT *8*
-// Size choice
+// *8.1* : Size choice
 let sizeChoice = document.querySelectorAll("#boissons-choice .btn-article-choice")
 sizeChoice.forEach(size =>{
     size.addEventListener("click", ()=>{
@@ -571,7 +608,7 @@ sizeChoice.forEach(size =>{
         size.classList.add("selected")
     })
 })
-// Quantity choice
+// *8.2* : Quantity choice
 let beverageIncrement = document.querySelector("#boissons-choice .increment")
 let beverageDecrement = document.querySelector("#boissons-choice .decrement")
 
@@ -586,7 +623,7 @@ beverageDecrement.addEventListener("click", ()=>{
         beverageQty.innerHTML--
     }
 })
-// beverage choice
+// *8.3* : beverage choice
 let addBeverageChoice = document.querySelector("#boissons-choice .add-choice")
 
 addBeverageChoice.addEventListener("click", ()=>{
@@ -614,7 +651,7 @@ decrement.addEventListener("click", ()=>{
         qty.innerHTML--
     }
 })
-// beverage choice
+
 let addOtherChoice = document.querySelector("#other-choice .add-choice")
 
 addOtherChoice.addEventListener("click", ()=>{
@@ -627,7 +664,7 @@ addOtherChoice.addEventListener("click", ()=>{
 
 // FUNCTIONS *10*
 /**
- * Display title-list-articles depending on the category
+ * *10.1* : Display title-list-articles depending on the category
  * @param {string} category name of a category
  */
 function buildIntroProducts(category){
@@ -683,7 +720,7 @@ document.querySelector(".title-list-articles")
     document.querySelector(".title-list-articles").innerHTML = html
 }
 /**
- * Extract sides of the datalist of products
+ * *10.2* : Extract sides of the datalist of products
  * @param {object} data list of products from fetch
  * @param {*} tabIdOfSides the id of the sides to propose
  * @param {*} category the category where to find the side
@@ -700,7 +737,7 @@ function filterSidesForMenu(data, tabIdOfSides, category){
     return tabOfSides;
 }
 /**
- * Add item to cart and reset articleToAdd, dialog and refresh the cart area
+ * *10.3* : Add item to cart and reset articleToAdd, dialog and refresh the cart area
  * @param {object} articleToAdd the item to add to cart
  */
 function addToCart(articleToAdd){
@@ -710,7 +747,7 @@ function addToCart(articleToAdd){
     fetchProductForCart()
 }
 /**
- * Reset the dialog with default parameters
+ * *10.4* : Reset the dialog with default parameters
  */
 function resetDialog(){
     document.querySelectorAll(".selected").forEach(selectedCard=>{
@@ -732,7 +769,7 @@ function resetDialog(){
     steps[0].classList.remove("d-none")
 }
 /**
- * Reset cart, articleToAdd, cart area of the DOM, the total price and the input.value for the table choice
+ * *10.5* : Reset cart, articleToAdd, cart area of the DOM, the total price and the input.value for the table choice
  */
 function resetOrder(){
     cart={}
@@ -744,7 +781,7 @@ function resetOrder(){
     })
 }
 /**
- * Undisplay the actual page and display the targetted page
+ * *10.6* : Undisplay the actual page and display the targetted page
  * @param {string} actualPageId the tag id of the actual page ("div")
  * @param {string} nextPageId the tag id of the targetted page ("div")
  */
@@ -753,7 +790,7 @@ function changePage(actualPageId, nextPageId){
     document.getElementById(`${nextPageId}`).classList.remove("d-none")
 }
 /**
- * Capîtalize the first letter of a string
+ * *10.7* : Capîtalize the first letter of a string
  * @param {string} string a string where the first letter has to be capitalized
  * @returns a string with the first letter capitalized
  */
@@ -764,7 +801,7 @@ function camelize(string){
     return stringToCamelize;
 }
 /**
- * Erase the word "menu" in the name of the item
+ * *10.8* : Erase the word "menu" in the name of the item
  * @param {string} article the name of the article to process
  * @returns {string} the string modified
  */
@@ -775,7 +812,7 @@ function eraseMenu(article){
     return article
 }
 /**
- * This function test if the input of table choice is correctly filled
+ * *10.9* : This function test if the input of table choice is correctly filled
  * @returns Boolean true if input is valid false otherwise
  */
 function tableChoiceIsValid(){

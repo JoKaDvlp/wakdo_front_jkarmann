@@ -426,6 +426,30 @@ document.querySelector(".new-order").addEventListener("click", ()=>{
     resetOrder()
     orderNumber++
 })
+// Event listener to scroll with arrow
+const containers = document.querySelectorAll(".container-categories, .side-choice-container, .sauce-choice-container, .beverage-choice-container")
+const scrollAmount = 300;
+
+containers.forEach(container => {
+    container.parentElement.querySelector(".arrow-left").addEventListener("click", ()=>{
+        console.log("coucou gauche");
+        
+        container.scrollBy({
+            top:0,
+            left: -scrollAmount,
+            behavior: "smooth"
+        })
+    })
+    container.parentElement.querySelector(".arrow-right").addEventListener("click", ()=>{
+        console.log("coucou droite");
+        
+        container.scrollBy({
+            top:0,
+            left: scrollAmount,
+            behavior: "smooth"
+        })
+    })
+});
 
 // DIALOG MANAGEMENT
 // Menu dialog

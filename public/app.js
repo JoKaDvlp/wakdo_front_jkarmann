@@ -1,6 +1,5 @@
 let cart = {}
 let articleToAdd = {}
-let orderNumber = 1
 
 //OBJETS METIER
 class Order {

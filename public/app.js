@@ -129,62 +129,78 @@ const classes = {
 /**
  * *2.1* : Fetch categories 
  */
-fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
-    .then(res=>{
-        return res.json()
-    })
-    .then(data=>{
-        buildCategoriesList(data)
-    })
-/**
- * *2.2* : Fetch products list depending on category to build products list
- */
-function fetchProduct(category) {
-    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
+try {
+    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-categories')
         .then(res=>{
             return res.json()
         })
         .then(data=>{
-            buildProductsList(data[category], category)
+            buildCategoriesList(data)
         })
+} catch (error) {
+    console.error(error);
+}
+/**
+ * *2.2* : Fetch products list depending on category to build products list
+ */
+function fetchProduct(category) {
+    try {
+        fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
+            .then(res=>{
+                return res.json()
+            })
+            .then(data=>{
+                buildProductsList(data[category], category)
+            })
+    } catch (error) {
+        console.error(error);
+    }
 }
 /**
  * *2.3* : Fetch products to build and display menu's components
  * @param {string} menuSize the size of the menus to display the correct picture of sides
  */
 function fetchProductForMenus(menuSize){
-    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
-    .then(res=>{
-        return res.json()
-    })
-    .then(data=>{
-        //List of beverage for menus
-        buildProductsListForMenus([data["boissons"]],"beverage-choice-container")
-        // List of sides for menus including fries and salads
-        let sides = []
-        if (menuSize === "1") {
-            sides = filterSidesForMenu(data,[24,26],"frites")
-        } else {
-            sides = filterSidesForMenu(data,[22,25],"frites")
-        }
-        let salads = filterSidesForMenu(data,[60], "salades")
-        
-        buildProductsListForMenus([sides,salads], "side-choice-container")
-        buildProductsListForMenus([data["sauces"]], "sauce-choice-container")
-    })
+    try {
+        fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
+        .then(res=>{
+            return res.json()
+        })
+        .then(data=>{
+            //List of beverage for menus
+            buildProductsListForMenus([data["boissons"]],"beverage-choice-container")
+            // List of sides for menus including fries and salads
+            let sides = []
+            if (menuSize === "1") {
+                sides = filterSidesForMenu(data,[24,26],"frites")
+            } else {
+                sides = filterSidesForMenu(data,[22,25],"frites")
+            }
+            let salads = filterSidesForMenu(data,[60], "salades")
+            
+            buildProductsListForMenus([sides,salads], "side-choice-container")
+            buildProductsListForMenus([data["sauces"]], "sauce-choice-container")
+        })
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 /**
  * *2.4* : Fetch product to build and display the list of products added in the cart
  */
 function fetchProductForCart(){
-    fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
-    .then(res=>{
-        return res.json()
-    })
-    .then(data=>{
-        buildCartList(data)
-    })
+    try {
+        fetch('http://exam-back.jkarmann.mywebecom.ovh/api/get-products')
+        .then(res=>{
+            return res.json()
+        })
+        .then(data=>{
+            buildCartList(data)
+        })
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 // SEND DATA *3*

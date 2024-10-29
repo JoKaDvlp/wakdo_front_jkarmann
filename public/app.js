@@ -833,11 +833,11 @@ function eraseMenu(article){
  */
 function tableChoiceIsValid(){
     let reg = /^\d$/ // Regexp to match a single digit from 0 to 9
-    let isValid = true
     inputs.forEach(input=>{
         if (reg.test(input.value) == false) {
             isValid = false
+            return false;
         }
     })
-    return isValid
+    return true;
 }
